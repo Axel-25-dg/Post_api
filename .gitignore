@@ -1,0 +1,82 @@
+﻿# ----------------------------------------
+# DEPENDENCIAS
+# ----------------------------------------
+/node_modules
+/jspm_packages
+
+# Dependencias generadas por Yarn (si usa Yarn v1)
+/.yarn/cache
+/.yarn/unplugged
+/.yarn/build-state.yml
+/.yarn/install-state.gz
+/.pnp.*
+/yarn-error.log
+
+# ----------------------------------------
+# REGISTROS Y CACHÉ (Logs & Cache)
+# ----------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+.stylelintcache
+
+# Archivos de caché del SO
+.DS_Store
+Thumbs.db
+
+# ----------------------------------------
+# CARPETAS DE COMPILACIÓN (Build Artifacts)
+# ----------------------------------------
+# La carpeta donde se almacena el código compilado o minificado.
+# Ajuste según su proyecto (ej: 'dist', 'out', 'build', 'public/dist')
+/dist
+/build
+/out
+/public/build
+/coverage
+
+# Archivos generados por TypeScript
+*.tsbuildinfo
+
+# ----------------------------------------
+# ARCHIVOS DE CONFIGURACIÓN DE EDITOR
+# ----------------------------------------
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+# Nota: Si quiere compartir la configuración de VS Code con el equipo,
+# descomente las líneas de !.vscode/
+
+# JetBrains (IntelliJ, WebStorm, etc.)
+.idea/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*~
+*.swp
+.netrwhist
+
+# ----------------------------------------
+# SECRETO Y VARIABLES DE ENTORNO
+# ----------------------------------------
+# Nunca suba variables de entorno con credenciales
+.env
+.env.*
+!.env.example # Permite subir una plantilla (ejemplo)
+
+# ----------------------------------------
+# ARCHIVOS DEL SISTEMA OPERATIVO Y TEMPORALES
+# ----------------------------------------
+# Temporales creados por editores
+# (ej: archivos de backup)
+\#*#
+/temp
+/tmp
