@@ -23,6 +23,7 @@ export class UsersService {
       const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
       const user = this.userRepository.create({
         ...createUserDto,
+        role: createUserDto.role || 'USER',
         password: hashedPassword,
       });
       return await this.userRepository.save(user);
@@ -40,11 +41,11 @@ export class UsersService {
       const { page, limit, search, searchField, sort, order } = queryDto;
 
       const query = this.userRepository.createQueryBuilder('user');
-
+      /*
       if (isActive !== undefined) {
         query.andWhere('user.isActive = :isActive', { isActive });
       }
-
+      */
       if (search) {
         if (searchField) {
           // El frontend decide el campo de filtro
