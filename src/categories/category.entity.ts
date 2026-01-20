@@ -7,4 +7,7 @@ export class Category {
 
   @Column()
   name: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

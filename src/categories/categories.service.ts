@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
@@ -6,12 +6,15 @@ import { Category } from './category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
+import { Post } from '../posts/post.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepo: Repository<Category>,
+    @InjectRepository(Post)
+    private readonly postRepo: Repository<Post>,
   ) {}
 
   async create(dto: CreateCategoryDto): Promise<Category | null> {
@@ -29,27 +32,30 @@ export class CategoriesService {
       const { page, limit, search, searchField, sort, order } = queryDto;
       const query = this.categoryRepo.createQueryBuilder('category');
 
+      // Only show active categories
+      query.andWhere('category.isActive = :isActive', { isActive: true });
+
       if (search) {
         if (searchField) {
           switch (searchField) {
             case 'name':
-              query.where('category.name ILIKE :search', {
+              query.andWhere('category.name ILIKE :search', {
                 search: `%${search}%`,
               });
               break;
             case 'description':
-              query.where('category.description ILIKE :search', {
+              query.andWhere('category.description ILIKE :search', {
                 search: `%${search}%`,
               });
               break;
             default:
-              query.where(
+              query.andWhere(
                 '(category.name ILIKE :search OR category.description ILIKE :search)',
                 { search: `%${search}%` },
               );
           }
         } else {
-          query.where(
+          query.andWhere(
             '(category.name ILIKE :search OR category.description ILIKE :search)',
             { search: `%${search}%` },
           );
@@ -94,6 +100,18 @@ export class CategoriesService {
       const category = await this.findOne(id);
       if (!category) return null;
 
+      // Check if category has active posts
+      const postsCount = await this.postRepo.count({ 
+        where: { category: { id } } 
+      });
+
+      if (postsCount > 0) {
+        // Soft delete - deactivate instead of physical delete
+        category.isActive = false;
+        return await this.categoryRepo.save(category);
+      }
+
+      // No posts, safe to physically delete
       return await this.categoryRepo.remove(category);
     } catch (err) {
       console.error('Error deleting category:', err);

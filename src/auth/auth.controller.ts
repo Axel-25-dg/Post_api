@@ -25,10 +25,10 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
-    const token = await this.authService.register(createUserDto);
-    if (!token) {
+    const result = await this.authService.register(createUserDto);
+    if (!result) {
       throw new BadRequestException('Failed to register user');
     }
-    return new SuccessResponseDto('Registration successful', { access_token: token });
+    return new SuccessResponseDto('Registration successful', result);
   }
 }

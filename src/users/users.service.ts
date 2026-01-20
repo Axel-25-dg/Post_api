@@ -104,6 +104,15 @@ export class UsersService {
     }
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    try {
+      return await this.userRepository.findOne({ where: { email } });
+    } catch (err) {
+      console.error('Error finding user by email:', err);
+      return null;
+    }
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
